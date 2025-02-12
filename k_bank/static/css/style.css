@@ -76,11 +76,7 @@
 #upimg img{
     height: 300px;
 } 
-/* 
-#mini a{
-    text-decoration: none;
-    color: black;
-} */
+
 
 @media screen and (max-width: 450px) {
     .carousel-item img{

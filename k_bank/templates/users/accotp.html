@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verification</title>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="card p-4 shadow">
+            <h2 class="mb-4 text-center">Verify OTP</h2>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="otp" class="form-label">Enter OTP</label>
+                    <input type="text" class="form-control" name="otp" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Verify OTP</button>
+                {% if error %}<p style="color: red;">{{ error }}</p>{% endif %}
+            </form>
+        </div>
+    </div>
+</body>
+</html>
