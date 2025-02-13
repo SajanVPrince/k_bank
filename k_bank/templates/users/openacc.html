@@ -42,49 +42,50 @@
 
   <!-- Account opening details -->
 
+  <!-- Alert -->
+  <div style="display: flex; justify-content: center; margin-top: 2%;">
+    {% if messages %}
+    {% for message in  messages%}
+    <div class="alert alert-warning alert-dismissible" style="width: 400px;">
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+    </div>
+
   <div class="container mt-5">
     <div class="card p-4 shadow">
         <h2 class="mb-4 text-center">Open a Bank Account</h2>
-        <form>
+        <form action="{% url 'openacc' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
             <div class="mb-3">
                 <label for="fullName" class="form-label">Full Name</label>
-                <input type="text" class="form-control" id="fullName" required>
+                <input type="text" class="form-control" name="fullname" id="fullName" required>
             </div>
             
             <div class="mb-3">
                 <label for="email" class="form-label">Email address</label>
-                <input type="email" class="form-control" id="email" required>
+                <input type="email" class="form-control" name="email" id="email" required>
             </div>
             
             <div class="mb-3">
                 <label for="phone" class="form-label">Phone Number</label>
-                <input type="tel" class="form-control" id="phone" required>
+                <input type="tel" class="form-control" name="phone" id="phone" required>
             </div>
             
             <div class="mb-3">
                 <label for="address" class="form-label">Address</label>
-                <textarea class="form-control" id="address" rows="3" required></textarea>
+                <textarea class="form-control" name="address" id="address" rows="3" required></textarea>
             </div>
             
-            <div class="mb-3">
-                <label for="passportPhoto" class="form-label">Passport Size Photo</label>
-                <input type="file" class="form-control" id="passportPhoto" accept="image/*" required>
-            </div>
-            
-            <div class="mb-3">
-                <label for="addressProof" class="form-label">Address Proof (PAN Card or Other)</label>
-                <input type="file" class="form-control" id="addressProof" accept="image/*,application/pdf" required>
-            </div>
-            
-            <div class="mb-3 form-check">
-                <input type="checkbox" class="form-check-input" id="terms" required>
-                <label class="form-check-label" for="terms">I agree to the terms and conditions</label>
-            </div>
-            
-            <a href="verify" class="btn btn-success w-100">Submit Application</a>
+
+            <button type="submit" class="btn btn-success w-100">Submit Application</button>
         </form>
     </div>
 </div>
+
 
   <!-- Account opening details end -->
 

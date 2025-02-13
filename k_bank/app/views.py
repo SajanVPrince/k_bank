@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.models import *
 from .models import *
@@ -49,6 +49,37 @@ def adhome(req):
 def adprf(req):
     return render(req,'admin/adprofile.html')
 
+def viewappli(req):
+    data = Openacc.objects.all()
+    return render(req,'admin/viewappli.html',{'data':data})
+
+def reject(req,id):
+    data=Openacc.objects.filter(id=id)
+    data.delete()
+    return redirect(viewappli)
+
+def approve(req,id):
+    data = get_object_or_404(Openacc, id=id)
+    Approved.objects.create(account=data)
+    send_mail(
+        'Account Approved',
+        'Your account has been approved. Please visit the branch.',
+        settings.EMAIL_HOST_USER,
+        [data.email],
+        fail_silently=False
+    )
+    data.delete()
+    return redirect(viewappli)
+
+def appapp(req):
+    data = Approved.objects.all()
+    return render(req,'admin/appapp.html',{'data':data})
+
+def activate(request, id):
+
+
+    return redirect('view_users')
+
 
 # --------------- Users ------------------------ 
 
@@ -60,50 +91,62 @@ def openacc(req):
         fullname = req.POST['fullname']
         phone = req.POST['phone']
         address = req.POST['address']
-        accountType = req.POST['accountType']
-        photo = req.FILES['photo']
-        proof = req.FILES['proof']
         email = req.POST['email']
+        
         if User.objects.filter(email=email).exists():
             messages.warning(req, "Email already registered")
             return redirect('register')
+
         otp = get_random_string(length=6, allowed_chars='0123456789')
         req.session['otp'] = otp
         req.session['email'] = email
         req.session['fullname'] = fullname
         req.session['phone'] = phone
         req.session['address'] = address
-        req.session['photo'] = photo
-        req.session['proof'] = proof
-        send_mail(
+
+        try:
+            send_mail(
                 'Your OTP Code',
                 f'Your OTP is: {otp}',
-                settings.EMAIL_HOST_USER, [email]
+                settings.EMAIL_HOST_USER,
+                [email],
+                fail_silently=False,
             )
-        messages.success(req, "OTP sent to your email")
+            messages.success(req, "OTP sent to your email")
+        except Exception as e:
+            print(f"Email Error: {e}")  # Check for errors in the console
+            messages.error(req, "Failed to send OTP. Check email settings.")
+
         return redirect(accotp)
-    return render(req,'users/openacc.html')
+    
+    return render(req, 'users/openacc.html')
 
 def accotp(req):
     if req.method == 'POST':
         otp = req.POST['otp']
-        if otp == req.session['otp']:
-            email = req.session['email']
-            fullname = req.session['fullname']
-            phone = req.session['phone']
-            address = req.session['address']
-            photo = req.session['photo']
-            proof = req.session['proof']
+        if otp == req.session.get('otp', ''):
+            email = req.session.get('email')
+            fullname = req.session.get('fullname')
+            phone = req.session.get('phone')
+            address = req.session.get('address')
             account_number = f"111{phone}"
             Openacc.objects.create(
-                accountnumber=account_number,email=email,fullname=fullname,phone=phone,address=address,photo=photo,proof=proof
-            )    
+                accountnumber=account_number, email=email, fullname=fullname, phone=phone, address=address
+            )
+            req.session.pop('otp', None)
+            req.session.pop('email', None)
+            req.session.pop('fullname', None)
+            req.session.pop('phone', None)
+            req.session.pop('address', None)
+
             messages.success(req, "Account created successfully")
-            return redirect(bank_login)
+            return redirect('home') 
         else:
-            messages.warning(req, "Invalid OTP")
-            return redirect(accotp)
-    return render(req,'users/accotp.html')
+            messages.warning(req, "Invalid OTP. Please try again.")
+            return redirect('accotp')
+    
+    return render(req, 'users/accotp.html')
+
 
 
 def money(req):
