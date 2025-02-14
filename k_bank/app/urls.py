@@ -15,6 +15,8 @@ urlpatterns = [
     path('viewapp',views.viewappli),
     path('approve/<int:id>',views.approve, name='approve'),
     path('reject/<int:id>',views.reject,name='reject'),
+    path('appapp',views.appapp),
+    path('activate/<int:id>',views.activate),
     
 
 # ---------users------------------

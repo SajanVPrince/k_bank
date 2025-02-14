@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.utils.crypto import get_random_string
 from django.core.mail import send_mail
 from django.conf import settings
+from django.contrib.auth.hashers import make_password 
 
 # ------------------- Login ---------------------
 
@@ -73,11 +74,22 @@ def approve(req,id):
 
 def appapp(req):
     data = Approved.objects.all()
-    return render(req,'admin/appapp.html',{'data':data})
+    return render(req,'admin/approved.html',{'data':data})
 
-def activate(request, id):
-
-
+def activate(req, id):
+    approved = get_object_or_404(Approved, id=id)
+    openacc= approved.account
+    user = User.objects.create_user(
+    username=openacc.accountnumber,
+    password=make_password("12345678") 
+    )
+    user.save()
+    bank = Bank.objects.create(
+        account_number=openacc.accountnumber,
+        balance=0
+    )
+    bank.save()
+    approved.delete()
     return redirect('view_users')
 
 

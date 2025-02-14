@@ -16,6 +16,7 @@ class Approved(models.Model):
 
 class Bank(models.Model):
     accountnumber = models.IntegerField()
+    balance = models.IntegerField()
 
 class Register(models.Model):
     accountnumber = models.ForeignKey(Bank,on_delete=models.CASCADE)
@@ -25,7 +26,3 @@ class Register(models.Model):
     address = models.TextField()
     photo = models.FileField()
     proof = models.FileField()
-
-class Balance(models.Model):
-    accountnumber = models.ForeignKey(Bank,on_delete=models.CASCADE)
-    balance = models.IntegerField()
