@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Approved List</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
+</head>
+<body>
+    <!--NAv Start  -->
+
+   <nav id="mainav">
+    <div class="container-fluid" style="background-color: rgba(172, 117, 15, 0.658);" id="navbar">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#"><b>K_Bank</b><i class="fa-solid fa-piggy-bank"></i></a>
+      </div>
+    <ul class="nav justify-content-end">
+        <li class="nav-item">
+          <a class="nav-link" href="viewapp">View Applications</a>
+        </li>
+        <li class="nav-item" style="background-color: rgb(223, 185, 115);">
+          <a class="nav-link" href="appapp">Approved Application</a>
+        </li>
+        <!-- <li class="nav-item">
+          <a class="nav-link" href="adloan">Loans</a>
+        </li> -->
+        <!-- <li class="nav-item">
+          <a class="nav-link" href="payments">Payments done</a>
+        </li> -->
+        <li class="nav-item">
+          <a class="nav-link" href="login"><i class="fa-solid fa-user"></i></a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Nav end -->
+
+  <div class="container mt-5">
+    <h1>Approved List</h1>
+    <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>      
+            <th scope="col">Phone</th>
+            <th scope="col">Address</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in data %}
+          <tr>
+            <td>{{ i.fullname }}</td>
+            <td>{{ i.email }}</td>  
+            <td>{{ i.phone }}</td>
+            <td>{{ i.address }}</td>
+            <td><a href="activate/{{ i.id }}" class="btn btn-success">Activate</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+  </div>
+    
+</body>
+</html>
