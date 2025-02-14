@@ -30,6 +30,11 @@ urlpatterns = [
     path('verify',views.accotp,name="accotp"),
     path('money',views.money),
     path('mini',views.mini),
+    path('actacc',views.activateacc),
+    path('askemail',views.askemail),
+    path('verifyacc',views.verifyacc),
+    path('confirm',views.confirm)
+
 
 
     
